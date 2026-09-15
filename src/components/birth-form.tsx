@@ -12,14 +12,28 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BirthProfile } from "@/lib/horoscope";
+import { getZodiacSign } from "@/lib/zodiac";
 
 type BirthFormProps = {
   onSubmit: (profile: BirthProfile) => void;
   initialProfile?: BirthProfile | null;
 };
 
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
 function todayIsoDate() {
   return new Date().toISOString().slice(0, 10);
+}
+
+function formatDisplayDate(isoDate: string) {
+  const [year, month, day] = isoDate.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.toLocaleDateString(undefined, {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 export function BirthForm({ onSubmit, initialProfile }: BirthFormProps) {
@@ -100,6 +114,13 @@ export function BirthForm({ onSubmit, initialProfile }: BirthFormProps) {
               onChange={(e) => setBirthDate(e.target.value)}
               required
             />
+            {ISO_DATE_RE.test(birthDate) && (
+              <p className="text-xs text-muted-foreground">
+                {formatDisplayDate(birthDate)} &middot; {getZodiacSign(birthDate).symbol}{" "}
+                {getZodiacSign(birthDate).name} &mdash; double-check this is the date you
+                meant to enter.
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col gap-2">
