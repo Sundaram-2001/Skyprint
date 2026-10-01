@@ -1,9 +1,14 @@
+<script>
+    import { signInWithGoogle } from "$lib/auth";
+</script>
 <main>
 	<p class="mark">Skyprint</p>
 	<h1>Welcome to Skyprint</h1>
 	<p class="lede">Get your daily horrorscope delivered to you</p>
 	<div class="actions">
-		<button type="button">
+		<button type="button"
+			onclick={signInWithGoogle}
+		>
 			<svg viewBox="0 0 18 18" aria-hidden="true">
 				<path
 					fill="#4285F4"
